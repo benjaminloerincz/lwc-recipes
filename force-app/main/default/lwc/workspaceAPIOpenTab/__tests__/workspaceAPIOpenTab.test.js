@@ -23,15 +23,15 @@ describe('c-workspace-api-open-tab', () => {
         });
         document.body.appendChild(element);
 
+        // Simulate console navigation
         IsConsoleNavigation.emit(true);
+        await flushPromises();
 
-        // Query lightning-button component element
+        // Find and click button
         const buttonEl = element.shadowRoot.querySelector('lightning-button');
         buttonEl.click();
 
-        await flushPromises();
-
-        // Compare if related platformWorkspaceApi functions have been called
+        // Check that related platformWorkspaceApi functions have been called
         expect(openTab).toHaveBeenCalledWith({
             pageReference: {
                 type: 'standard__objectPage',

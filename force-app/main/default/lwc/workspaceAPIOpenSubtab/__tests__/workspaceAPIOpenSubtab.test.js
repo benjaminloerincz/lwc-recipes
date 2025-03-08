@@ -28,17 +28,18 @@ describe('c-workspace-api-open-subtab', () => {
         });
         document.body.appendChild(element);
 
-        const enclosingTabId = 'tab0';
+        // Simulate console navigation
         IsConsoleNavigation.emit(true);
-        EnclosingTabId.emit(enclosingTabId);
+        EnclosingTabId.emit(ENCLOSING_TAB_ID);
 
-        // Query lightning-button component element
+        // Find and click button
         const buttonEl = element.shadowRoot.querySelector('lightning-button');
         buttonEl.click();
 
+        // Wait for async event
         await flushPromises();
 
-        // Compare if related platformWorkspaceApi functions have been called
+        // Check that related platformWorkspaceApi functions have been called
         expect(openSubtab).toHaveBeenCalledWith(ENCLOSING_TAB_ID, {
             pageReference: {
                 type: 'standard__objectPage',

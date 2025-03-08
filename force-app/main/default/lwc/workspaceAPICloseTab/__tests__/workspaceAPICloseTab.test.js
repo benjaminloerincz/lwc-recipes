@@ -3,7 +3,7 @@ import {
     IsConsoleNavigation,
     getFocusedTabInfo,
     closeTab,
-    FOCUSED_TAB
+    FOCUSED_TAB_ID
 } from 'lightning/platformWorkspaceApi';
 import WorkspaceAPICloseTab from 'c/workspaceAPICloseTab';
 
@@ -28,17 +28,19 @@ describe('c-workspace-api-close-tab', () => {
         });
         document.body.appendChild(element);
 
+        // Simulate console navigation
         IsConsoleNavigation.emit(true);
 
-        // Query lightning-button component element
+        // Find and click button
         const buttonEl = element.shadowRoot.querySelector('lightning-button');
         buttonEl.click();
 
+        // Wait for async event
         await flushPromises();
 
-        // Compare if related platformWorkspaceApi functions have been called
+        // Check that related platformWorkspaceApi functions have been called
         expect(getFocusedTabInfo).toHaveBeenCalled();
-        expect(closeTab).toHaveBeenCalledWith(FOCUSED_TAB);
+        expect(closeTab).toHaveBeenCalledWith(FOCUSED_TAB_ID);
     });
 
     it('is accessible', async () => {

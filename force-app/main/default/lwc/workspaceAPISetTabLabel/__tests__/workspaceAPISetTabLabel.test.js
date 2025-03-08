@@ -4,8 +4,10 @@ import {
     IsConsoleNavigation,
     getFocusedTabInfo,
     setTabLabel,
-    FOCUSED_TAB
+    FOCUSED_TAB_ID
 } from 'lightning/platformWorkspaceApi';
+
+const UPDATED_TAB_LABEL = 'Awesome Label';
 
 describe('c-workspace-api-set-tab-label', () => {
     afterEach(() => {
@@ -28,18 +30,22 @@ describe('c-workspace-api-set-tab-label', () => {
         });
         document.body.appendChild(element);
 
-        const TAB_LABEL = 'Awesome Label';
+        // Simulate console navigation
         IsConsoleNavigation.emit(true);
 
-        // Query lightning-button component element
+        // Find and click button
         const buttonEl = element.shadowRoot.querySelector('lightning-button');
         buttonEl.click();
 
+        // Wait for async event
         await flushPromises();
 
-        // Compare if related platformWorkspaceApi functions have been called
+        // Check that related platformWorkspaceApi functions have been called
         expect(getFocusedTabInfo).toHaveBeenCalled();
-        expect(setTabLabel).toHaveBeenCalledWith(FOCUSED_TAB, TAB_LABEL);
+        expect(setTabLabel).toHaveBeenCalledWith(
+            FOCUSED_TAB_ID,
+            UPDATED_TAB_LABEL
+        );
     });
 
     it('is accessible', async () => {

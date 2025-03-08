@@ -4,7 +4,7 @@ import {
     IsConsoleNavigation,
     getFocusedTabInfo,
     setTabHighlighted,
-    FOCUSED_TAB
+    FOCUSED_TAB_ID
 } from 'lightning/platformWorkspaceApi';
 
 describe('c-workspace-api-highlight-tab', () => {
@@ -28,19 +28,21 @@ describe('c-workspace-api-highlight-tab', () => {
         });
         document.body.appendChild(element);
 
+        // Simulate console navigation
         IsConsoleNavigation.emit(true);
 
-        // Query lightning-input component element
+        // Find and toggle input
         const inputEl = element.shadowRoot.querySelector('lightning-input');
         inputEl.dispatchEvent(
             new CustomEvent('change', { detail: { checked: true } })
         );
 
+        // Wait for async event
         await flushPromises();
 
-        // Compare if related platformWorkspaceApi functions have been called
+        // Check that related platformWorkspaceApi functions have been called
         expect(getFocusedTabInfo).toHaveBeenCalled();
-        expect(setTabHighlighted).toHaveBeenCalledWith(FOCUSED_TAB, true, {
+        expect(setTabHighlighted).toHaveBeenCalledWith(FOCUSED_TAB_ID, true, {
             pulse: true,
             state: 'success'
         });

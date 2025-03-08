@@ -3,7 +3,7 @@ import {
     disableTabClose,
     IsConsoleNavigation,
     getFocusedTabInfo,
-    FOCUSED_TAB
+    FOCUSED_TAB_ID
 } from 'lightning/platformWorkspaceApi';
 
 import WorkspaceAPIDisableTabClose from 'c/workspaceAPIDisableTabClose';
@@ -29,20 +29,26 @@ describe('c-workspace-api-disable-tab-close', () => {
         });
         document.body.appendChild(element);
 
+        // Simulate console navigation
         IsConsoleNavigation.emit(true);
+        await flushPromises();
 
-        // Query lightning-input component element
+        // Find and toggle input
         const inputEl = element.shadowRoot.querySelector('lightning-input');
         const toggleValue = true;
         inputEl.dispatchEvent(
             new CustomEvent('change', { detail: { checked: toggleValue } })
         );
 
+        // Wait for async event
         await flushPromises();
 
-        // Compare if related platformWorkspaceApi functions have been called
+        // Check that related platformWorkspaceApi functions have been called
         expect(getFocusedTabInfo).toHaveBeenCalled();
-        expect(disableTabClose).toHaveBeenCalledWith(FOCUSED_TAB, toggleValue);
+        expect(disableTabClose).toHaveBeenCalledWith(
+            FOCUSED_TAB_ID,
+            toggleValue
+        );
     });
 
     it('is accessible', async () => {

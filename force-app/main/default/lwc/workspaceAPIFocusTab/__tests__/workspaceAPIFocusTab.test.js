@@ -4,7 +4,7 @@ import {
     IsConsoleNavigation,
     getFocusedTabInfo,
     getAllTabInfo,
-    FOCUSED_TAB
+    TAB1
 } from 'lightning/platformWorkspaceApi';
 import WorkspaceAPIFocusTab from 'c/workspaceAPIFocusTab';
 
@@ -29,23 +29,21 @@ describe('c-workspace-api-focus-tab', () => {
         });
         document.body.appendChild(element);
 
+        // Simulate console navigation
         IsConsoleNavigation.emit(true);
 
-        // Query lightning-button component element
+        // Find and click button
         const buttonEl = element.shadowRoot.querySelector('lightning-button');
         buttonEl.click();
 
+        // Wait for async event
         await flushPromises();
 
-        // Compare if related platformWorkspaceApi functions have been called
+        // Check that related platformWorkspaceApi functions have been called
         expect(getFocusedTabInfo).toHaveBeenCalled();
         expect(getAllTabInfo).toHaveBeenCalled();
-        const allTabs = await getAllTabInfo();
-        const selectedTabIndex = allTabs.findIndex(
-            (possibleNextTab) => possibleNextTab.tabId === FOCUSED_TAB
-        );
-        const nextTabId = allTabs[selectedTabIndex + 1].tabId;
-        expect(focusTab).toHaveBeenCalledWith(nextTabId);
+        // Based on our mock, next tab that receives focus should be TAB1
+        expect(focusTab).toHaveBeenCalledWith(TAB1);
     });
 
     it('is accessible', async () => {
