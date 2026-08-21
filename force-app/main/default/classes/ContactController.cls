@@ -1,7 +1,7 @@
 public with sharing class ContactController {
     @AuraEnabled(cacheable=true)
     public static List<Contact> getContactList() {
-        return [
+        List<Contact> contacts = [
             SELECT
                 Id,
                 Name,
@@ -16,39 +16,72 @@ public with sharing class ContactController {
             WITH USER_MODE
             LIMIT 10
         ];
+        Logger.debug('Retrieved ' + contacts.size() + ' contacts')
+            .addTag('ContactController');
+        Logger.saveLog();
+        return contacts;
     }
 
     @AuraEnabled(cacheable=true)
     public static List<Contact> findContacts(String searchKey) {
         String key = '%' + searchKey + '%';
-        return [
+        List<Contact> contacts = [
             SELECT Id, Name, Title, Phone, Email, Picture__c
             FROM Contact
             WHERE Name LIKE :key AND Picture__c != NULL
             WITH USER_MODE
             LIMIT 10
         ];
+        Logger.debug(
+                'Found ' +
+                    contacts.size() +
+                    ' contacts for search key \'' +
+                    searchKey +
+                    '\''
+            )
+            .addTag('ContactController');
+        Logger.saveLog();
+        return contacts;
     }
 
     @AuraEnabled(cacheable=true)
     public static Contact getSingleContact() {
-        return [
+        Contact cont = [
             SELECT Id, Name, Title, Phone, Email, Picture__c
             FROM Contact
             WITH USER_MODE
             LIMIT 1
         ];
+        Logger.debug('Retrieved single contact')
+            .setRecord(cont)
+            .addTag('ContactController');
+        Logger.saveLog();
+        return cont;
     }
 
     @AuraEnabled
     public static void updateContacts(List<Contact> contactsForUpdate) {
-        // Make sure we can update the database before trying to update
-        if (!Schema.sObjectType.Contact.isUpdateable()) {
-            throw new SecurityException(
-                'Insufficient permissions to update contacts'
-            );
+        try {
+            // Make sure we can update the database before trying to update
+            if (!Schema.sObjectType.Contact.isUpdateable()) {
+                Logger.warn('Insufficient permissions to update contacts')
+                    .addTag('ContactController');
+                throw new SecurityException(
+                    'Insufficient permissions to update contacts'
+                );
+            }
+            update contactsForUpdate;
+            Logger.info('Updated ' + contactsForUpdate.size() + ' contacts')
+                .setRecord(contactsForUpdate)
+                .addTag('ContactController');
+        } catch (System.DmlException e) {
+            Logger.error('Failed to update contacts', e)
+                .setRecord(contactsForUpdate)
+                .addTag('ContactController');
+            throw e;
+        } finally {
+            Logger.saveLog();
         }
-        update contactsForUpdate;
     }
 
     @AuraEnabled
@@ -62,6 +95,17 @@ public with sharing class ContactController {
             FirstName = firstName,
             LastName = lastName
         );
-        update contact;
+        try {
+            update contact;
+            Logger.info('Updated contact')
+                .setRecord(contact)
+                .addTag('ContactController');
+        } catch (System.DmlException e) {
+            Logger.error('Failed to update contact with ID ' + recordId, e)
+                .addTag('ContactController');
+            throw e;
+        } finally {
+            Logger.saveLog();
+        }
     }
 }

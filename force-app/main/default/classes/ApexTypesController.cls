@@ -1,9 +1,12 @@
 public with sharing class ApexTypesController {
     @AuraEnabled(cacheable=true)
     public static String checkApexTypes(CustomWrapper wrapper) {
-        // Using System.debug() isn't good practice for production applications.
-        // It's used here to showcase how the received data looks like in Apex.
-        System.debug(wrapper);
+        // Log the received payload instead of using System.debug(), which isn't suitable for production use.
+        Logger.fine(
+                'Received CustomWrapper payload: ' + JSON.serialize(wrapper)
+            )
+            .addTag('ApexTypesController');
+        Logger.saveLog();
         // The values are based on the data that is defined in the
         // apexImperativeMethodWithComplexParams Lightning web component.
         String response =
