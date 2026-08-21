@@ -1,4 +1,4 @@
-import { createElement } from 'lwc';
+import { createElement } from '@lwc/engine-dom';
 import NavToNewRecord from 'c/navToNewRecord';
 import { getNavigateCalledWith } from 'lightning/navigation';
 // This test uses a mocked navigation plugin.
@@ -42,7 +42,7 @@ describe('c-nav-to-new-record', () => {
 
         const { pageReference } = getNavigateCalledWith();
 
-        // Verify component called with correct event type ane params
+        // Verify component called with correct event type and params
         expect(pageReference.type).toBe(NAV_TYPE);
         expect(pageReference.attributes.objectApiName).toBe(
             NAV_OBJECT_API_NAME

@@ -1,5 +1,5 @@
 import { LightningElement, wire } from 'lwc';
-import { gql, graphql } from 'lightning/uiGraphQLApi';
+import { gql, graphql } from 'lightning/graphql';
 
 // As of Winter '24, `lightning-record-picker` only supports a single selection.
 // This sample component shows how you can turn `lightning-record-picker` into
@@ -93,6 +93,11 @@ export default class RecordPickerMultiValue extends LightningElement {
         variables: '$variables'
     })
     wiredGraphQL({ data, errors }) {
+        // Ignore graphql query results if the variables are undefined
+        if (this.variables === undefined) {
+            return;
+        }
+
         this.wireError = errors;
         if (errors || !data) {
             return;

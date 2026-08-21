@@ -18,20 +18,19 @@ A collection of easy-to-digest code examples for Lightning Web Components. Each 
 
 ## Table of contents
 
--   [Installing the app using a Scratch Org](#installing-the-app-using-a-scratch-org): This is the recommended installation option. Use this option if you are a developer who wants to experience the app and the code.
+- [Installing the app using a Scratch Org](#installing-the-app-using-a-scratch-org): This is the recommended installation option. Use this option if you are a developer who wants to experience the app and the code.
 
--   [Installing the app using an Unlocked Package](#installing-the-app-using-an-unlocked-package): This option allows anybody to experience the sample app without installing a local development environment.
+- [Installing the app using an Unlocked Package](#installing-the-app-using-an-unlocked-package): This option allows anybody to experience the sample app without installing a local development environment.
 
--   [Installing the app using a Developer Edition Org or a Trailhead Playground](#installing-the-app-using-a-developer-edition-org-or-a-trailhead-playground): Useful when tackling Trailhead Badges or if you want the app deployed to a more permanent environment than a Scratch org.
+- [Installing the app using a Developer Edition Org or a Trailhead Playground](#installing-the-app-using-a-developer-edition-org-or-a-trailhead-playground): Useful when tackling Trailhead Badges or if you want the app deployed to a more permanent environment than a Scratch org.
 
--   [Optional installation instructions](#optional-installation-instructions)
+- [Optional installation instructions](#optional-installation-instructions)
 
--   [Code tours](#code-tours)
+- [Code tours](#code-tours)
 
 ## Installing the app using a Scratch Org
 
 1. Set up your environment. Follow the steps in the [Quick Start: Lightning Web Components](https://trailhead.salesforce.com/content/learn/projects/quick-start-lightning-web-components/) Trailhead project. The steps include:
-
     - Enable Dev Hub in your Trailhead Playground
     - Install Salesforce CLI
     - Install Visual Studio Code
@@ -92,12 +91,11 @@ Make sure to start from a brand-new environment to avoid conflicts with any prev
 
 1. Log in to your org
 
-1. Click [this link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3t000002li7xAAA) to install the Recipes unlocked package in your org.
+1. Click [this link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04taj000000X2izAAC) to install the Recipes unlocked package in your org.
 
 1. Select **Install for All Users**
 
 1. Import Account and Contacts data:
-
     - Click [here](https://raw.githubusercontent.com/trailheadapps/lwc-recipes/main/data/Accounts-Contacts.csv) to access the **Accounts-Contacts.csv** file. Right click on the browser window and save the file as **Accounts-Contacts.csv**.
     - In **Setup**, type **Data Import** in the Quick Find box and click **Data Import Wizard**.
     - Click **Launch Wizard**.
@@ -106,7 +104,6 @@ Make sure to start from a brand-new environment to avoid conflicts with any prev
     - Click **Next**, **Next**, and **Start Import**.
 
 1. If you're attempting the [Quick Start](https://trailhead.salesforce.com/en/content/learn/projects/quick-start-lwc-recipes-app) on Trailhead, this step is required, but otherwise, skip:
-
     - Go to **Setup > Users > Permission Sets**.
     - Click **recipes**.
     - Click **Manage Assignments**.
