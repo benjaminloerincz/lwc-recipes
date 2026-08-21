@@ -4,10 +4,12 @@ import { refreshApex } from '@salesforce/apex';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import getAccountList from '@salesforce/apex/AccountController.getAccountList';
 import { reduceErrors } from 'c/ldsUtils';
+import { getLogger } from 'c/logger';
 
 export default class LdsDeleteRecord extends LightningElement {
     accounts;
     error;
+    logger = getLogger();
 
     /** Wired Apex result so it can be refreshed programmatically */
     wiredAccountsResult;
@@ -37,6 +39,10 @@ export default class LdsDeleteRecord extends LightningElement {
                 })
             );
             await refreshApex(this.wiredAccountsResult);
+            this.logger
+                .info('Deleted account record')
+                .setRecordId(recordId)
+                .addTag('ldsDeleteRecord');
         } catch (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -45,6 +51,13 @@ export default class LdsDeleteRecord extends LightningElement {
                     variant: 'error'
                 })
             );
+            this.logger
+                .error('Failed to delete account record')
+                .setRecordId(recordId)
+                .setExceptionDetails(error)
+                .addTag('ldsDeleteRecord');
+        } finally {
+            await this.logger.saveLog();
         }
     }
 }

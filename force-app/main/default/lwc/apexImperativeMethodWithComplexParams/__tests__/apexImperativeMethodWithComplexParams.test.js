@@ -11,6 +11,18 @@ jest.mock(
     { virtual: true }
 );
 
+// Mocking Nebula Logger
+const mockLogger = {
+    info: jest.fn().mockReturnThis(),
+    error: jest.fn().mockReturnThis(),
+    setExceptionDetails: jest.fn().mockReturnThis(),
+    addTag: jest.fn().mockReturnThis(),
+    saveLog: jest.fn()
+};
+jest.mock('c/logger', () => ({ getLogger: () => mockLogger }), {
+    virtual: true
+});
+
 // Sample parameter for imperative Apex call
 const APEX_PARAMETER = {
     someString: 'This is a string',

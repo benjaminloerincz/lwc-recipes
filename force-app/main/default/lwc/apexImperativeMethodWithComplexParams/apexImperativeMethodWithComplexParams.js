@@ -1,4 +1,5 @@
 import { LightningElement } from 'lwc';
+import { getLogger } from 'c/logger';
 import checkApexTypes from '@salesforce/apex/ApexTypesController.checkApexTypes';
 
 export default class ApexImperativeMethodWithComplexParams extends LightningElement {
@@ -8,6 +9,7 @@ export default class ApexImperativeMethodWithComplexParams extends LightningElem
 
     message;
     error;
+    logger = getLogger();
 
     handleStringChange(event) {
         this.stringValue = event.target.value;
@@ -39,9 +41,18 @@ export default class ApexImperativeMethodWithComplexParams extends LightningElem
         try {
             this.message = await checkApexTypes({ wrapper: parameterObject });
             this.error = undefined;
+            this.logger
+                .info('checkApexTypes call completed')
+                .addTag('apexImperativeMethodWithComplexParams');
         } catch (error) {
             this.message = undefined;
             this.error = error;
+            this.logger
+                .error('checkApexTypes call failed')
+                .setExceptionDetails(error)
+                .addTag('apexImperativeMethodWithComplexParams');
+        } finally {
+            await this.logger.saveLog();
         }
     }
 }

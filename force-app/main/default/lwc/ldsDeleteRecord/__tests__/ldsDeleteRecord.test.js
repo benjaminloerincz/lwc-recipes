@@ -22,6 +22,20 @@ jest.mock(
     },
     { virtual: true }
 );
+
+// Mocking Nebula Logger
+const mockLogger = {
+    info: jest.fn().mockReturnThis(),
+    error: jest.fn().mockReturnThis(),
+    setExceptionDetails: jest.fn().mockReturnThis(),
+    setRecordId: jest.fn().mockReturnThis(),
+    addTag: jest.fn().mockReturnThis(),
+    saveLog: jest.fn()
+};
+jest.mock('c/logger', () => ({ getLogger: () => mockLogger }), {
+    virtual: true
+});
+
 describe('c-lds-delete-record', () => {
     afterEach(() => {
         // The jsdom instance is shared across test cases in a single file so reset the DOM

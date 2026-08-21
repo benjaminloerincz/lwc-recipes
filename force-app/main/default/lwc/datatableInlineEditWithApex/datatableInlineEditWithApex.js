@@ -3,6 +3,7 @@ import getContacts from '@salesforce/apex/ContactController.getContactList';
 import updateContacts from '@salesforce/apex/ContactController.updateContacts';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { getLogger } from 'c/logger';
 
 const COLS = [
     { label: 'First Name', fieldName: 'FirstName', editable: true },
@@ -15,6 +16,7 @@ const COLS = [
 export default class DatatableInlineEditWithApex extends LightningElement {
     columns = COLS;
     draftValues = [];
+    logger = getLogger();
 
     @wire(getContacts)
     contacts;
@@ -40,6 +42,13 @@ export default class DatatableInlineEditWithApex extends LightningElement {
 
             // Display fresh data in the datatable
             await refreshApex(this.contacts);
+            this.logger
+                .info(
+                    'Updated ' +
+                        updatedFields.length +
+                        ' contacts via inline edit'
+                )
+                .addTag('datatableInlineEditWithApex');
         } catch (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -48,6 +57,12 @@ export default class DatatableInlineEditWithApex extends LightningElement {
                     variant: 'error'
                 })
             );
+            this.logger
+                .error('Failed to update or refresh contacts via inline edit')
+                .setExceptionDetails(error)
+                .addTag('datatableInlineEditWithApex');
+        } finally {
+            await this.logger.saveLog();
         }
     }
 }

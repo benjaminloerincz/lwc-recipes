@@ -6,6 +6,19 @@ import { createRecord } from 'lightning/uiRecordApi';
 // Realistic data after a create record call
 const mockCreateRecord = require('./data/createRecord.json');
 
+// Mocking Nebula Logger
+const mockLogger = {
+    info: jest.fn().mockReturnThis(),
+    error: jest.fn().mockReturnThis(),
+    setExceptionDetails: jest.fn().mockReturnThis(),
+    setRecordId: jest.fn().mockReturnThis(),
+    addTag: jest.fn().mockReturnThis(),
+    saveLog: jest.fn()
+};
+jest.mock('c/logger', () => ({ getLogger: () => mockLogger }), {
+    virtual: true
+});
+
 describe('c-lds-create-record', () => {
     afterEach(() => {
         // The jsdom instance is shared across test cases in a single file so reset the DOM
